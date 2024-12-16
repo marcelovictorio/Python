@@ -1,0 +1,35 @@
+def calcular_digitos_cpf(cpf_base):
+    """
+    Calcula os dois dígitos verificadores do CPF a partir dos primeiros 9 dígitos.
+
+    Parâmetro:
+        cpf_base (str): Uma string com os 9 primeiros dígitos do CPF.
+
+    Retorno:
+        str: CPF completo com os dois dígitos verificadores.
+    """
+    if len(cpf_base) != 9 or not cpf_base.isdigit():
+        raise ValueError("CPF base deve conter exatamente 9 dígitos numéricos.")
+
+    # Cálculo do primeiro dígito verificador
+    soma = sum(int(cpf_base[i]) * (10 - i) for i in range(9))
+    primeiro_digito = 11 - (soma % 11)
+    primeiro_digito = primeiro_digito if primeiro_digito < 10 else 0
+
+    # Cálculo do segundo dígito verificador
+    cpf_com_primeiro = cpf_base + str(primeiro_digito)
+    soma = sum(int(cpf_com_primeiro[i]) * (11 - i) for i in range(10))
+    segundo_digito = 11 - (soma % 11)
+    segundo_digito = segundo_digito if segundo_digito < 10 else 0
+
+    return cpf_base + str(primeiro_digito) + str(segundo_digito)
+
+# Exemplo de uso
+if __name__ == "__main__":
+    for i in range(198, 1000):
+        cpf_base = f"{i:03}622571"  # Incrementa os três primeiros dígitos e fixa os outros 6
+        try:
+            cpf_completo = calcular_digitos_cpf(cpf_base)
+            print(f"CPF completo: {cpf_completo}")
+        except ValueError as e:
+            print(e)
